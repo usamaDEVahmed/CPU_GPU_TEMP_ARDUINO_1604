@@ -3,18 +3,26 @@ import platform
 class Runner():
 
     OS_NOT_FOUND = 'OS_NOT_FOUND'
-
-    def __init__(self):
-        self.os_names = ['windows', 'linux']
+    WINDOWS = 'WINDOWS'
+    LINUX = 'LINUX'
 
     def get_os(self):
         os = platform.system()
-        for os_name in self.os_names:
-            if os.lower() == os_name.lower():
-                return os
-        
-        return Runner.OS_NOT_FOUND
+        if os.lower() == Runner.WINDOWS.lower():
+            return Runner.WINDOWS
+        elif os.lower() == Runner.LINUX.lower():
+            return Runner.LINUX
+        else:
+            return Runner.OS_NOT_FOUND
+    
+    def get_cpu_temp_win(self):
+        pass
+    
+    def get_cpu_temp_linux(self):
+        pass
 
+    def get_gpu_temp(self):
+        pass
         
 
 if __name__ == '__main__':
