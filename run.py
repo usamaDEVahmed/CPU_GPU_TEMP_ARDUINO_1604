@@ -1,4 +1,5 @@
 import platform
+import wmi
 
 class Runner():
 
@@ -16,15 +17,22 @@ class Runner():
             return Runner.OS_NOT_FOUND
     
     def get_cpu_temp_win(self):
-        pass
+        return 'win'
     
     def get_cpu_temp_linux(self):
-        pass
+        return 'linux'
 
-    def get_gpu_temp(self):
-        pass
+    def get_cpu_temp(self):
+        current_os = self.get_os()
+        if current_os == Runner.WINDOWS:
+            return self.get_cpu_temp_win()
+        elif current_os == Runner.LINUX:
+            return self.get_cpu_temp_linux()
+        else:
+            return None
+
         
 
 if __name__ == '__main__':
     runner = Runner()
-    print(runner.get_os())
+    print(runner.get_cpu_temp())
