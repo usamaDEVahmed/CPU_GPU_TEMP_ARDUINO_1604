@@ -1,5 +1,4 @@
 import platform
-import wmi
 
 class Runner():
 
@@ -32,6 +31,9 @@ class Runner():
             return None
 
         
+# use the below link
+# https://stackoverflow.com/questions/3262603/accessing-cpu-temperature-in-python
+
 
 if __name__ == '__main__':
     runner = Runner()
