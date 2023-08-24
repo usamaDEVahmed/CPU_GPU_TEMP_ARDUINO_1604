@@ -1,4 +1,5 @@
 import platform
+from msl.loadlib import LoadLibrary 
 
 class Runner():
 
@@ -14,6 +15,16 @@ class Runner():
             return Runner.LINUX
         else:
             return Runner.OS_NOT_FOUND
+        
+    def initialize_openhardwaremonitor(self):
+        open_hardware_monitor_lib = LoadLibrary('libs\\OpenHardwareMonitorLib.dll')
+        openHardwareMonitor = open_hardware_monitor_lib.lib.Hardware
+        handle = openHardwareMonitor.Computer()
+        handle.MainboardEnabled = True
+        handle.CPUEnabled = True
+        handle.GPUEnabled = True
+        handle.Open()
+        return handle
     
     def get_cpu_temp_win(self):
         return 'win'
@@ -37,4 +48,4 @@ class Runner():
 
 if __name__ == '__main__':
     runner = Runner()
-    print(runner.get_cpu_temp())
+    print(runner.initialize_openhardwaremonitor())
