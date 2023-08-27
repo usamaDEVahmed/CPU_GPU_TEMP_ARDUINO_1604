@@ -1,18 +1,30 @@
 import platform
 import time
 from msl.loadlib import LoadLibrary 
+import threading
 
 class Runner():
 
     OS_NOT_FOUND = 'OS_NOT_FOUND'
     WINDOWS = 'WINDOWS'
     LINUX = 'LINUX'
+    CPU = 'CPU'
+    GPU = 'GPU'
+    TEMPERATURE = 'TEMPERATURE'
 
     def __init__(self):
         '''
         monitor: Reference object to load the data from OpenHardwareMonitorLib.dll
+        cpu_hardware: Reference object set for the first time of execution to make it usable without the need to fetch it fromm .dll again
+        gpu_hardware: Reference object set for the first time of execution to make it usable without the need to fetch it fromm .dll again
+        cpu_temp: Reference object set for the first time of execution to make it usable without the need to fetch it fromm .dll again
+        gpu_temp: Reference object set for the first time of execution to make it usable without the need to fetch it fromm .dll again
         '''
         self.monitor = None
+        self.cpu_hardware = None
+        self.gpu_hardware = None
+        self.cpu_temp = None
+        self.gpu_temp = None
 
     def get_os(self):
         os = platform.system()
@@ -31,37 +43,42 @@ class Runner():
         monitor.CPUEnabled = True
         monitor.GPUEnabled = True
         monitor.Open()
-        return monitor
+        self.monitor = monitor
 
     def set_temperature_sensors_from_dll(self, monitor):
         for hardware in monitor.Hardware:
-            hardware.Update()
             for sensor in hardware.Sensors:
                 if str(sensor.SensorType).lower() == 'temperature':
                     if 'cpu package' in str(sensor.Name).lower():
-                        self.cpu_temp_sensor = sensor
+                        self.cpu_hardware = hardware
+                        self.cpu_temp = sensor
                     if 'gpu' in str(sensor.Name).lower():
-                        self.gpu_temp_sensor = sensor
-                    
+                        self.gpu_hardware = hardware
+                        self.gpu_temp = sensor
     
-    def get_cpu_temp_win(self):
+    def get_stats_win(self):
         # monitor reference to refer the OpenhardwareMonitorLib.dll is only set for first time of execution.
         # Other times, the set reference is used only.
         if self.monitor == None:
-            self.monitor = self.initialize_openhardwaremonitor()
+            self.initialize_openhardwaremonitor()
         
-        self.set_temperature_sensors_from_dll(self.monitor)
-        return (self.cpu_temp_sensor.Value, self.gpu_temp_sensor.Value)
+        if (self.cpu_hardware == None) or (self.gpu_hardware == None):
+            self.set_temperature_sensors_from_dll(self.monitor)
+        
+        self.cpu_hardware.Update()
+        self.gpu_hardware.Update()
+        return {Runner.CPU: {Runner.TEMPERATURE: self.cpu_temp.Value}, 
+                Runner.GPU: {Runner.TEMPERATURE: self.gpu_temp.Value}}
     
-    def get_cpu_temp_linux(self):
+    def get_stats_linux(self):
         return 'linux'
 
-    def get_cpu_temp(self):
+    def get_stats(self):
         current_os = self.get_os()
         if current_os == Runner.WINDOWS:
-            return self.get_cpu_temp_win()
+            return self.get_stats_win()
         elif current_os == Runner.LINUX:
-            return self.get_cpu_temp_linux()
+            return self.get_stats_linux()
         else:
             return None
 
@@ -72,6 +89,7 @@ class Runner():
 
 if __name__ == '__main__':
     runner = Runner()
-    while True:
-        print(runner.get_cpu_temp())
-        time.sleep(2)
+    for i in range(5):
+        print(runner.get_stats())
+    
+
