@@ -86,8 +86,8 @@ class Runner():
         
         self.cpu_hardware.Update()
         self.gpu_hardware.Update()
-        return {Runner.CPU: {Runner.TEMPERATURE: self.cpu_temp_sensor.Value, Runner.USAGE: '{value:.2f}%'.format(value = self.cpu_load_sensor.Value)}, 
-                Runner.GPU: {Runner.TEMPERATURE: self.gpu_temp_sensor.Value, Runner.USAGE: '{value:.2f}%'.format(value = self.gpu_load_sensor.Value)}}
+        return {Runner.CPU: {Runner.TEMPERATURE: str(self.cpu_temp_sensor.Value), Runner.USAGE: '{value:.2f}%'.format(value = self.cpu_load_sensor.Value)}, 
+                Runner.GPU: {Runner.TEMPERATURE: str(self.gpu_temp_sensor.Value), Runner.USAGE: '{value:.2f}%'.format(value = self.gpu_load_sensor.Value)}}
     
     def get_stats_linux(self):
         return 'linux'
