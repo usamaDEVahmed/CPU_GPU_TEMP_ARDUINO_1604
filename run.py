@@ -50,7 +50,6 @@ class Runner():
         open_hardware_monitor_lib = LoadLibrary('libs\\OpenHardwareMonitorLib.dll', 'net')
         openHardwareMonitor = open_hardware_monitor_lib.lib.OpenHardwareMonitor.Hardware
         monitor = openHardwareMonitor.Computer()
-        monitor.MainboardEnabled = True
         monitor.CPUEnabled = True
         monitor.GPUEnabled = True
         monitor.Open()
