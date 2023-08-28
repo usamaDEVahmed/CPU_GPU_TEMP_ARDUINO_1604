@@ -16,18 +16,18 @@ class Runner():
             monitor: Reference object to load the data from OpenHardwareMonitorLib.dll
             cpu_hardware: Reference object set for the first time of execution to make it usable without the need to fetch it fromm .dll again.
             gpu_hardware: Reference object set for the first time of execution to make it usable without the need to fetch it fromm .dll again.
-            cpu_temp: Reference object set for the first time of execution to make it usable without the need to fetch it fromm .dll again.
-            gpu_temp: Reference object set for the first time of execution to make it usable without the need to fetch it fromm .dll again.
-            cpu_load: Reference object set for the first time of execution to make it usable without the need to fetch it fromm .dll again.
-            gpu_load: Reference object set for the first time of execution to make it usable without the need to fetch it fromm .dll again.
+            cpu_temp_sensor: Reference object set for the first time of execution to make it usable without the need to fetch it fromm .dll again.
+            gpu_temp_sensor: Reference object set for the first time of execution to make it usable without the need to fetch it fromm .dll again.
+            cpu_load_sensor: Reference object set for the first time of execution to make it usable without the need to fetch it fromm .dll again.
+            gpu_load_sensor: Reference object set for the first time of execution to make it usable without the need to fetch it fromm .dll again.
         '''
         self.monitor = None
         self.cpu_hardware = None
         self.gpu_hardware = None
-        self.cpu_temp = None
-        self.gpu_temp = None
-        self.cpu_load = None
-        self.gpu_load = None
+        self.cpu_temp_sensor = None
+        self.gpu_temp_sensor = None
+        self.cpu_load_sensor = None
+        self.gpu_load_sensor = None
 
     def get_os(self):
         '''
@@ -64,15 +64,15 @@ class Runner():
                 if str(sensor.SensorType).lower() == 'temperature':
                     if 'cpu package' in str(sensor.Name).lower():
                         self.cpu_hardware = hardware
-                        self.cpu_temp = sensor
+                        self.cpu_temp_sensor = sensor
                     if 'gpu' in str(sensor.Name).lower():
                         self.gpu_hardware = hardware
-                        self.gpu_temp = sensor
+                        self.gpu_temp_sensor = sensor
                 if str(sensor.SensorType).lower() == 'load':
                     if 'cpu total' in str(sensor.Name).lower():
-                        self.cpu_load = sensor
+                        self.cpu_load_sensor = sensor
                     if 'gpu core' in str(sensor.Name).lower():
-                        self.gpu_load = sensor
+                        self.gpu_load_sensor = sensor
     
     def get_stats_win(self):
         '''
@@ -81,13 +81,13 @@ class Runner():
         if self.monitor == None:
             self.initialize_openhardwaremonitor()
         
-        if (self.cpu_hardware == None or self.gpu_hardware == None) or (self.cpu_load == None or self.gpu_load == None):
+        if (self.cpu_hardware == None or self.gpu_hardware == None) or (self.cpu_load_sensor == None or self.gpu_load_sensor == None):
             self.set_temperature_sensors_from_dll(self.monitor)
         
         self.cpu_hardware.Update()
         self.gpu_hardware.Update()
-        return {Runner.CPU: {Runner.TEMPERATURE: self.cpu_temp.Value, Runner.USAGE: '{value:.2f}%'.format(value = self.cpu_load.Value)}, 
-                Runner.GPU: {Runner.TEMPERATURE: self.gpu_temp.Value, Runner.USAGE: '{value:.2f}%'.format(value = self.gpu_load.Value)}}
+        return {Runner.CPU: {Runner.TEMPERATURE: self.cpu_temp_sensor.Value, Runner.USAGE: '{value:.2f}%'.format(value = self.cpu_load_sensor.Value)}, 
+                Runner.GPU: {Runner.TEMPERATURE: self.gpu_temp_sensor.Value, Runner.USAGE: '{value:.2f}%'.format(value = self.gpu_load_sensor.Value)}}
     
     def get_stats_linux(self):
         return 'linux'
