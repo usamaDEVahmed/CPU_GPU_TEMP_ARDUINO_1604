@@ -9,6 +9,7 @@ class Runner():
     CPU = 'CPU'
     GPU = 'GPU'
     TEMPERATURE = 'TEMPERATURE'
+    USAGE = 'USAGE'
 
     def __init__(self):
         '''
@@ -17,12 +18,16 @@ class Runner():
             gpu_hardware: Reference object set for the first time of execution to make it usable without the need to fetch it fromm .dll again.
             cpu_temp: Reference object set for the first time of execution to make it usable without the need to fetch it fromm .dll again.
             gpu_temp: Reference object set for the first time of execution to make it usable without the need to fetch it fromm .dll again.
+            cpu_load: Reference object set for the first time of execution to make it usable without the need to fetch it fromm .dll again.
+            gpu_load: Reference object set for the first time of execution to make it usable without the need to fetch it fromm .dll again.
         '''
         self.monitor = None
         self.cpu_hardware = None
         self.gpu_hardware = None
         self.cpu_temp = None
         self.gpu_temp = None
+        self.cpu_load = None
+        self.gpu_load = None
 
     def get_os(self):
         '''
@@ -64,6 +69,11 @@ class Runner():
                     if 'gpu' in str(sensor.Name).lower():
                         self.gpu_hardware = hardware
                         self.gpu_temp = sensor
+                if str(sensor.SensorType).lower() == 'load':
+                    if 'cpu total' in str(sensor.Name).lower():
+                        self.cpu_load = sensor
+                    if 'gpu core' in str(sensor.Name).lower():
+                        self.gpu_load = sensor
     
     def get_stats_win(self):
         '''
@@ -72,13 +82,13 @@ class Runner():
         if self.monitor == None:
             self.initialize_openhardwaremonitor()
         
-        if (self.cpu_hardware == None) or (self.gpu_hardware == None):
+        if (self.cpu_hardware == None or self.gpu_hardware == None) or (self.cpu_load == None or self.gpu_load == None):
             self.set_temperature_sensors_from_dll(self.monitor)
         
         self.cpu_hardware.Update()
         self.gpu_hardware.Update()
-        return {Runner.CPU: {Runner.TEMPERATURE: self.cpu_temp.Value}, 
-                Runner.GPU: {Runner.TEMPERATURE: self.gpu_temp.Value}}
+        return {Runner.CPU: {Runner.TEMPERATURE: self.cpu_temp.Value, Runner.USAGE: '{value:.2f}%'.format(value = self.cpu_load.Value)}, 
+                Runner.GPU: {Runner.TEMPERATURE: self.gpu_temp.Value, Runner.USAGE: '{value:.2f}%'.format(value = self.gpu_load.Value)}}
     
     def get_stats_linux(self):
         return 'linux'
@@ -102,7 +112,5 @@ class Runner():
 
 if __name__ == '__main__':
     runner = Runner()
-    for i in range(5):
-        print(runner.get_stats())
-    
-
+    while True:
+        print(runner.get_stats())    
