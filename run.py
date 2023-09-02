@@ -1,5 +1,6 @@
 import platform
 from msl.loadlib import LoadLibrary 
+import sys, time
 
 class Runner():
 
@@ -86,8 +87,8 @@ class Runner():
         
         self.cpu_hardware.Update()
         self.gpu_hardware.Update()
-        return {Runner.CPU: {Runner.TEMPERATURE: str(self.cpu_temp_sensor.Value), Runner.USAGE: '{value:.1f}%'.format(value = self.cpu_load_sensor.Value)}, 
-                Runner.GPU: {Runner.TEMPERATURE: str(self.gpu_temp_sensor.Value), Runner.USAGE: '{value:.1f}%'.format(value = self.gpu_load_sensor.Value)}}
+        return {Runner.CPU: {Runner.TEMPERATURE: str(self.cpu_temp_sensor.Value) + 'C', Runner.USAGE: '{value:.1f}%'.format(value = self.cpu_load_sensor.Value)}, 
+                Runner.GPU: {Runner.TEMPERATURE: str(self.gpu_temp_sensor.Value) + 'C', Runner.USAGE: '{value:.1f}%'.format(value = self.gpu_load_sensor.Value)}}
     
     def get_stats_linux(self):
         return 'linux'
@@ -113,3 +114,5 @@ if __name__ == '__main__':
     runner = Runner()
     while True:
         print(runner.get_stats())    
+        sys.stdout.flush()
+        time.sleep(1)
