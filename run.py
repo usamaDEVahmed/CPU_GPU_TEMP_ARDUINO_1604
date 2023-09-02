@@ -1,6 +1,5 @@
 import platform
 from msl.loadlib import LoadLibrary 
-import sys, time
 
 class Runner():
 
@@ -108,11 +107,3 @@ class Runner():
         
 # use the below link
 # https://stackoverflow.com/questions/3262603/accessing-cpu-temperature-in-python
-
-
-if __name__ == '__main__':
-    runner = Runner()
-    while True:
-        print(runner.get_stats())    
-        sys.stdout.flush()
-        time.sleep(1)
