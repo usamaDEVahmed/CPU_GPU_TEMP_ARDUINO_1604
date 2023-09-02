@@ -1,26 +1,40 @@
 from run import Runner
 import serial
+import time
 
 class Sender():
 
+    ENCODING = 'utf-8'
+
     def __init__(self):
-        self.arduino_communicator = serial.Serial(port='COM4', baudrate=115200, timeout=0.1)  
+        self.arduino_communicator = serial.Serial(port='COM3', baudrate=115200, timeout=0.1)  
+        self.runner = Runner()
         self.data = None
 
     def get_stats(self):
-        runner = Runner()
-        return runner.get_stats()
+        if self.runner != None:
+            self.runner = Runner()
+        return self.runner.get_stats()
 
-    def send_data_to_arduino(self):
-        data = self.get_stats()
+    def convert_data_into_bytes(self, data):
+        return bytes(str(data), Sender.ENCODING)
 
-    def structure_data(data):
+    def structure_stats(self, stats):
+        # TODO: Structure the data into comma separated value in a string
         structured_data = None
         return structured_data
+
+    def send_data_to_arduino(self):
+        structured_data = self.structure_stats(self.get_stats())
+        print('[+] Sending data: ' + str(structured_data))
+        self.arduino_communicator.write(self.convert_data_into_bytes(structured_data))
     
     def close_arduino_communicator(self):
         self.arduino_communicator.close()
     
 
 if __name__ == '__main__':
-    print(Sender().structure_data())
+    sender = Sender()
+    while True:
+        sender.send_data_to_arduino()
+        time.sleep(1)
