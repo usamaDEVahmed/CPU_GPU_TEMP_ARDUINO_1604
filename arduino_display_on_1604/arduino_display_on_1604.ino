@@ -10,6 +10,6 @@ void loop() {
   while (!Serial.available())
   {
     String stats = Serial.readString();
-    Serial.print(stats);
+    Serial.println(stats);
   }
 }
