@@ -20,8 +20,7 @@ class Sender():
         return bytes(str(data), Sender.ENCODING)
 
     def structure_stats(self, stats):
-        # TODO: Structure the data into comma separated value in a string
-        structured_data = None
+        structured_data = f'{stats[Runner.CPU][Runner.TEMPERATURE]},{stats[Runner.CPU][Runner.USAGE]},{stats[Runner.GPU][Runner.TEMPERATURE]},{stats[Runner.GPU][Runner.USAGE]}'                
         return structured_data
 
     def send_data_to_arduino(self):
