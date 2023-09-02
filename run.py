@@ -1,6 +1,10 @@
 import platform
 from msl.loadlib import LoadLibrary 
 
+'''
+    Class that will use the OpenHardwareMonitorLib.dll and will fetch the CPU/GPU data
+    on the basis of the OS the script is currently running on
+'''
 class Runner():
 
     OS_NOT_FOUND = 'OS_NOT_FOUND'
