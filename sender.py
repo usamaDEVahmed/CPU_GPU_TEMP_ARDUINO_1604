@@ -1,4 +1,5 @@
 from run import Runner
+from port_scanner import PortScanner
 import serial
 import time
 
@@ -17,7 +18,8 @@ class Sender():
             self.arduino_communicator: Serial communication with Arduino
             self.runner: Reference to Runner module that fethces the CPU & GPU stats
         '''
-        self.arduino_communicator = serial.Serial(port='COM3', baudrate=115200, timeout=0.1)  
+        self.port_scanner = PortScanner()
+        self.arduino_communicator = serial.Serial(port=self.port_scanner.get_port_name(), baudrate=115200, timeout=0.1)  
         self.runner = Runner()
 
     def get_stats(self):
