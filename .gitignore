@@ -1,2 +1,3 @@
 libs/*.sys
+logs
 __pycache__
