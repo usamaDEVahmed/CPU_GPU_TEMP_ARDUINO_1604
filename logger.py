@@ -9,6 +9,7 @@ import logging.config
 class Logger():
         
     LOG_DIR = 'logs'
+    CONFIG_SET = False
 
     @staticmethod
     def get_logger(name):
@@ -20,6 +21,9 @@ class Logger():
         
         if not os.path.exists(Logger.LOG_DIR):
             os.mkdir(Logger.LOG_DIR)
+        
+        if not Logger.CONFIG_SET:
+            logging.config.fileConfig('log_config.ini')
+            Logger.CONFIG_SET = True
 
-        logging.config.fileConfig('log_config.ini')
         return logging.getLogger(name)
