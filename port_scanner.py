@@ -1,3 +1,4 @@
+from logger import Logger
 import subprocess
 import re
 
@@ -14,6 +15,7 @@ class PortScanner():
 
     def __init__(self):
         self.port_name = None
+        self.log = Logger.get_logger(__name__)
 
     def get_arduino_connected_port(self):
         '''
@@ -21,12 +23,16 @@ class PortScanner():
             to which Arduino board is connected
         '''
         command = "Get-PnpDevice -Class 'Ports' -InstanceId 'USB*' -Status OK | findstr Arduino"
+        self.log.debug(f'Running command to find Arduino board\'s port name: {command}')
         try:
             result = subprocess.run(["powershell", "-Command", command], capture_output=True, shell=True, check=True)
-        except subprocess.CalledProcessError:
+            self.log.debug(f'Result captured: {str(result)}')
+        except subprocess.CalledProcessError as e:
+            self.log.error('Exception occured.', exc_info=True)
             raise LookupError('No output returned. Please check the command or check Arduino connectivity')
         else:
             if PortScanner.ERROR_RESPONSE in str(result.stderr):
+                self.log.error('Look like Arduino board is not connected to the PC at all')
                 raise LookupError('Plesae check if Arduino is connected to any USB port')
         return result
     
@@ -36,6 +42,9 @@ class PortScanner():
         '''
         command_stdout = self.get_arduino_connected_port()
         port_name = re.search(PortScanner.WIN_REGEX, command_stdout.stdout.decode().strip())
-        return str(port_name.group(0))
+        if len(port_name.group(0)) != 0:
+            self.log.debug(f'Found Arduino board connected to port: {str(port_name.group(0))}')
+            return str(port_name.group(0))
+        self.log.error('Did not find Arduino board connected to any port')
+        return None
     
-
