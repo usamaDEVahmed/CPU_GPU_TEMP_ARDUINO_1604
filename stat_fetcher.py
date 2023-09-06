@@ -6,7 +6,7 @@ from msl.loadlib import LoadLibrary
     Class that will use the OpenHardwareMonitorLib.dll and will fetch the CPU/GPU data
     on the basis of the OS the script is currently running on
 '''
-class Runner():
+class StatFetcher():
 
     OS_NOT_FOUND = 'OS_NOT_FOUND'
     WINDOWS = 'WINDOWS'
@@ -42,12 +42,12 @@ class Runner():
             TODO: DOCS Update for LINUX
         '''
         os = platform.system()
-        if os.lower() == Runner.WINDOWS.lower():
-            return Runner.WINDOWS
-        elif os.lower() == Runner.LINUX.lower():
-            return Runner.LINUX
+        if os.lower() == StatFetcher.WINDOWS.lower():
+            return StatFetcher.WINDOWS
+        elif os.lower() == StatFetcher.LINUX.lower():
+            return StatFetcher.LINUX
         else:
-            return Runner.OS_NOT_FOUND
+            return StatFetcher.OS_NOT_FOUND
         
     def initialize_openhardwaremonitor(self):
         '''
@@ -99,8 +99,8 @@ class Runner():
         self.log.debug('updating the sensor values')
         self.cpu_hardware.Update()
         self.gpu_hardware.Update()
-        return {Runner.CPU: {Runner.TEMPERATURE: str(self.cpu_temp_sensor.Value) + 'C', Runner.USAGE: '{value:.1f}%'.format(value = self.cpu_load_sensor.Value)}, 
-                Runner.GPU: {Runner.TEMPERATURE: str(self.gpu_temp_sensor.Value) + 'C', Runner.USAGE: '{value:.1f}%'.format(value = self.gpu_load_sensor.Value)}}
+        return {StatFetcher.CPU: {StatFetcher.TEMPERATURE: str(self.cpu_temp_sensor.Value) + 'C', StatFetcher.USAGE: '{value:.1f}%'.format(value = self.cpu_load_sensor.Value)}, 
+                StatFetcher.GPU: {StatFetcher.TEMPERATURE: str(self.gpu_temp_sensor.Value) + 'C', StatFetcher.USAGE: '{value:.1f}%'.format(value = self.gpu_load_sensor.Value)}}
     
     def get_stats_linux(self):
         return 'linux'
@@ -111,9 +111,9 @@ class Runner():
         '''
         current_os = self.get_os()
         self.log.debug(f'Current OS: {current_os}')
-        if current_os == Runner.WINDOWS:
+        if current_os == StatFetcher.WINDOWS:
             return self.get_stats_win()
-        elif current_os == Runner.LINUX:
+        elif current_os == StatFetcher.LINUX:
             return self.get_stats_linux()
         else:
             return None

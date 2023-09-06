@@ -1,5 +1,5 @@
 from logger import Logger
-from run import Runner
+from stat_fetcher import StatFetcher
 from port_scanner import PortScanner
 import serial
 import time
@@ -22,7 +22,7 @@ class Sender():
         self.log = Logger.get_logger(__name__)
         self.port_scanner = PortScanner()
         self.arduino_communicator = serial.Serial(port=self.port_scanner.get_port_name(), baudrate=115200, timeout=0.1)  
-        self.runner = Runner()
+        self.runner = StatFetcher()
 
     def get_stats(self):
         '''
@@ -30,7 +30,7 @@ class Sender():
         '''
         if self.runner == None:
             self.log.debug('Creating new reference of Runner class')
-            self.runner = Runner()
+            self.runner = StatFetcher()
         return self.runner.get_stats()
 
     def convert_data_into_bytes(self, data):
@@ -44,7 +44,7 @@ class Sender():
         '''
             Structure the data finalize it in comma separated values
         '''
-        structured_data = f'{stats[Runner.CPU][Runner.TEMPERATURE]},{stats[Runner.CPU][Runner.USAGE]},{stats[Runner.GPU][Runner.TEMPERATURE]},{stats[Runner.GPU][Runner.USAGE]}'                
+        structured_data = f'{stats[StatFetcher.CPU][StatFetcher.TEMPERATURE]},{stats[StatFetcher.CPU][StatFetcher.USAGE]},{stats[StatFetcher.GPU][StatFetcher.TEMPERATURE]},{stats[StatFetcher.GPU][StatFetcher.USAGE]}'                
         self.log.debug(f'Structured data that is to be sent to Arduino: {str(structured_data)}')
         return structured_data
 
