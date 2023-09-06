@@ -40,11 +40,15 @@ class PortScanner():
         '''
             Returns the decoded port name to string from the data in result of the powershell command
         '''
-        command_stdout = self.get_arduino_connected_port()
-        port_name = re.search(PortScanner.WIN_REGEX, command_stdout.stdout.decode().strip())
-        if len(port_name.group(0)) != 0:
-            self.log.debug(f'Found Arduino board connected to port: {str(port_name.group(0))}')
-            return str(port_name.group(0))
-        self.log.error('Did not find Arduino board connected to any port')
-        return None
+        try:
+            command_stdout = self.get_arduino_connected_port()
+            port_name = re.search(PortScanner.WIN_REGEX, command_stdout.stdout.decode().strip())
+            if len(port_name.group(0)) != 0:
+                self.log.debug(f'Found Arduino board connected to port: {str(port_name.group(0))}')
+                return str(port_name.group(0))
+            self.log.error('Did not find Arduino board connected to any port')
+            return None
+        except LookupError as e:
+            self.log.error(f'Lookup Error occuured: {e}')
+            exit()
     
