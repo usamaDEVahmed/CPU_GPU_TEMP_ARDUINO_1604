@@ -1,3 +1,4 @@
+from logger import Logger
 from run import Runner
 from port_scanner import PortScanner
 import serial
@@ -18,6 +19,7 @@ class Sender():
             self.arduino_communicator: Serial communication with Arduino
             self.runner: Reference to Runner module that fethces the CPU & GPU stats
         '''
+        self.log = Logger.get_logger(__name__)
         self.port_scanner = PortScanner()
         self.arduino_communicator = serial.Serial(port=self.port_scanner.get_port_name(), baudrate=115200, timeout=0.1)  
         self.runner = Runner()
@@ -26,7 +28,8 @@ class Sender():
         '''
             Gets the stats from the Runner module it and returns it to the caller
         '''
-        if self.runner != None:
+        if self.runner == None:
+            self.log.debug('Creating new reference of Runner class')
             self.runner = Runner()
         return self.runner.get_stats()
 
@@ -34,6 +37,7 @@ class Sender():
         '''
             Converts the fetched stats into encoded bytes
         '''
+        self.log.debug(f'converting data: {data} into bytes using encoding: {Sender.ENCODING}')
         return bytes(str(data), Sender.ENCODING)
 
     def structure_stats(self, stats):
@@ -41,20 +45,25 @@ class Sender():
             Structure the data finalize it in comma separated values
         '''
         structured_data = f'{stats[Runner.CPU][Runner.TEMPERATURE]},{stats[Runner.CPU][Runner.USAGE]},{stats[Runner.GPU][Runner.TEMPERATURE]},{stats[Runner.GPU][Runner.USAGE]}'                
+        self.log.debug(f'Structured data that is to be sent to Arduino: {str(structured_data)}')
         return structured_data
 
     def send_data_to_arduino(self):
         '''
             Send the data to Arudino via Serial
         '''
-        structured_data = self.structure_stats(self.get_stats())
-        print('[+] Sending data: ' + str(structured_data))
-        self.arduino_communicator.write(self.convert_data_into_bytes(structured_data))
+        try:
+            structured_data = self.structure_stats(self.get_stats())
+            self.log.debug(f'Sending data to Arduino: {structured_data}')
+            self.arduino_communicator.write(self.convert_data_into_bytes(structured_data))
+        except:
+            self.log.exception('Exception occured while writing the data to Arduino board')
     
     def close_arduino_communicator(self):
         '''
             Close connection to Arduino Serial to stop communication
         '''
+        self.log.debug('Closing Arduino board communication')
         self.arduino_communicator.close()
     
 
