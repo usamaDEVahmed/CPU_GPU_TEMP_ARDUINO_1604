@@ -1,3 +1,4 @@
+from logger import Logger
 import platform
 from msl.loadlib import LoadLibrary 
 
@@ -25,6 +26,7 @@ class Runner():
             cpu_load_sensor: Reference object set for the first time of execution to make it usable without the need to fetch it fromm .dll again.
             gpu_load_sensor: Reference object set for the first time of execution to make it usable without the need to fetch it fromm .dll again.
         '''
+        self.log = Logger.get_logger(__name__)
         self.monitor = None
         self.cpu_hardware = None
         self.gpu_hardware = None
@@ -69,25 +71,32 @@ class Runner():
                     if 'cpu package' in str(sensor.Name).lower():
                         self.cpu_hardware = hardware
                         self.cpu_temp_sensor = sensor
+                        self.log.debug('CPU temperature sensor obtained')
                     if 'gpu' in str(sensor.Name).lower():
                         self.gpu_hardware = hardware
                         self.gpu_temp_sensor = sensor
+                        self.log.debug('GPU temperature sensors obtained')
                 if str(sensor.SensorType).lower() == 'load':
                     if 'cpu total' in str(sensor.Name).lower():
                         self.cpu_load_sensor = sensor
+                        self.log.debug('CPU usage sensor obtained')
                     if 'gpu core' in str(sensor.Name).lower():
                         self.gpu_load_sensor = sensor
+                        self.log.debug('GPU usage sensor obtained')
     
     def get_stats_win(self):
         '''
             Returns the stats by initializing the relevant objects and using them to get the data.
         '''
         if self.monitor == None:
+            self.log.debug('Initializing OpenHardwareMonitor.dll for the first time')
             self.initialize_openhardwaremonitor()
         
         if (self.cpu_hardware == None or self.gpu_hardware == None) or (self.cpu_load_sensor == None or self.gpu_load_sensor == None):
+            self.log.debug('Setting up the Temperature and Usage sensors')
             self.set_temperature_sensors_from_dll(self.monitor)
         
+        self.log.debug('updating the sensor values')
         self.cpu_hardware.Update()
         self.gpu_hardware.Update()
         return {Runner.CPU: {Runner.TEMPERATURE: str(self.cpu_temp_sensor.Value) + 'C', Runner.USAGE: '{value:.1f}%'.format(value = self.cpu_load_sensor.Value)}, 
@@ -101,6 +110,7 @@ class Runner():
             Common method that uses the methods depending upon the OS and returns the stats
         '''
         current_os = self.get_os()
+        self.log.debug(f'Current OS: {current_os}')
         if current_os == Runner.WINDOWS:
             return self.get_stats_win()
         elif current_os == Runner.LINUX:
