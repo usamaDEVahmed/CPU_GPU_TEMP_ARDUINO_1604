@@ -10,6 +10,8 @@ Python version == 3.8.10
 Python Modules:
 
 pythonnet==3.0.1
+
 msl-loadlib==0.10.0
+
 pyserial==3.5
 
