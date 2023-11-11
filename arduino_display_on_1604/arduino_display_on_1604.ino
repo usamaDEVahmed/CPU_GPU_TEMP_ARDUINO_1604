@@ -14,23 +14,30 @@ void setup()
 
 void loop() 
 {
-  // put your main code here, to run repeatedly:
-  lcd.setCursor(0, 0);
-  String line = readLine();
-  lcd.print(line);
-  delay(1000);
-}
+  lcd.setCursor(1, 0);
+  lcd.print("usamaDEVahmed");
 
-String readLine() 
-{
-  String readStrings = "";
+  String line = "";
   while (Serial.available() > 0)
   {
     char c = Serial.read();
-    if (c == 'e' || c == '\n')
+    if (c == 'S')
     {
-      return readStrings;
+      lcd.setCursor(0, 2);
+      lcd.print(line);;
+      line = "";
     }
-    readStrings += c;
+    else if (c == 'e')
+    {
+      lcd.setCursor(0, 3);
+      lcd.print(line);
+      line = "";
+    }
+    else 
+    {
+      line += c; 
+    }
   }
+  
+  delay(1000);
 }
