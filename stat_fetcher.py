@@ -1,6 +1,7 @@
 from logger import Logger
 import platform
 from msl.loadlib import LoadLibrary 
+import time, sys
 
 '''
     Class that will use the OpenHardwareMonitorLib.dll and will fetch the CPU/GPU data
@@ -121,3 +122,11 @@ class StatFetcher():
         
 # use the below link
 # https://stackoverflow.com/questions/3262603/accessing-cpu-temperature-in-python
+
+# This is just to test the fucntionality of this Module.
+# To test out if the stats are being fetched without any issue
+if __name__ == '__main__':
+    while True:
+        sys.stdout.flush()
+        print(StatFetcher().get_stats())
+        time.sleep(2)

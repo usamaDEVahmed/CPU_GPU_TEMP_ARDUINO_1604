@@ -13,6 +13,7 @@ import time
 class Sender():
 
     ENCODING = 'utf-8'
+    DATA_POSTFIX = 'e'
 
     def __init__(self):
         '''
@@ -44,9 +45,16 @@ class Sender():
         '''
             Structure the data finalize it in comma separated values
         '''
-        structured_data = f'{stats[StatFetcher.CPU][StatFetcher.TEMPERATURE]},{stats[StatFetcher.CPU][StatFetcher.USAGE]},{stats[StatFetcher.GPU][StatFetcher.TEMPERATURE]},{stats[StatFetcher.GPU][StatFetcher.USAGE]}'                
+        structured_data = f'CPU: {stats[StatFetcher.CPU][StatFetcher.TEMPERATURE]} {stats[StatFetcher.CPU][StatFetcher.USAGE]}\nGPU: {stats[StatFetcher.GPU][StatFetcher.TEMPERATURE]} {stats[StatFetcher.GPU][StatFetcher.USAGE]}'                
         self.log.debug(f'Structured data that is to be sent to Arduino: {str(structured_data)}')
         return structured_data
+    
+    def add_postfix_to_data(self, structured_data):
+        """
+            Adds postfix 'e' to the structured data so that Arduino can find the end point of the data
+        """
+        return structured_data + Sender.DATA_POSTFIX
+        
 
     def send_data_to_arduino(self):
         '''
@@ -54,8 +62,10 @@ class Sender():
         '''
         try:
             structured_data = self.structure_stats(self.get_stats())
-            self.log.debug(f'Sending data to Arduino: {structured_data}')
-            self.arduino_communicator.write(self.convert_data_into_bytes(structured_data))
+            structured_data = self.add_postfix_to_data(structured_data)
+            data = self.convert_data_into_bytes(structured_data)
+            self.log.debug(f'Sending data to Arduino: {data}')
+            self.arduino_communicator.write(data)
         except:
             self.log.exception('Exception occured while writing the data to Arduino board')
     
