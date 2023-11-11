@@ -15,3 +15,7 @@ msl-loadlib==0.10.0
 
 pyserial==3.5
 
+
+For Arduino two libs are used:
+LiquidCrystal_I2C.h
+Wire.h
