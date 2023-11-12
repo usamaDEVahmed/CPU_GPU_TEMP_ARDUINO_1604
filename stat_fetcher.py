@@ -100,8 +100,8 @@ class StatFetcher():
         self.log.debug('updating the sensor values')
         self.cpu_hardware.Update()
         self.gpu_hardware.Update()
-        return {StatFetcher.CPU: {StatFetcher.TEMPERATURE: str(self.cpu_temp_sensor.Value) + 'C', StatFetcher.USAGE: '{value:.1f}%'.format(value = self.cpu_load_sensor.Value)}, 
-                StatFetcher.GPU: {StatFetcher.TEMPERATURE: str(self.gpu_temp_sensor.Value) + 'C', StatFetcher.USAGE: '{value:.1f}%'.format(value = self.gpu_load_sensor.Value)}}
+        return {StatFetcher.CPU: {StatFetcher.TEMPERATURE: str(int(self.cpu_temp_sensor.Value)) + 'C', StatFetcher.USAGE: '{value:.1f}%'.format(value = self.cpu_load_sensor.Value)}, 
+                StatFetcher.GPU: {StatFetcher.TEMPERATURE: str(int(self.gpu_temp_sensor.Value)) + 'C', StatFetcher.USAGE: '{value:.1f}%'.format(value = self.gpu_load_sensor.Value)}}
     
     def get_stats_linux(self):
         return 'linux'

@@ -46,7 +46,7 @@ class Sender():
         '''
             Structure the data finalize it in comma separated values
         '''
-        structured_data = f'CPU: {stats[StatFetcher.CPU][StatFetcher.TEMPERATURE]} {stats[StatFetcher.CPU][StatFetcher.USAGE]}{Sender.LINE_SEPARATOR}GPU: {stats[StatFetcher.GPU][StatFetcher.TEMPERATURE]} {stats[StatFetcher.GPU][StatFetcher.USAGE]}'                
+        structured_data = f'{stats[StatFetcher.CPU][StatFetcher.TEMPERATURE]} {stats[StatFetcher.CPU][StatFetcher.USAGE]}{Sender.LINE_SEPARATOR}{stats[StatFetcher.GPU][StatFetcher.TEMPERATURE]} {stats[StatFetcher.GPU][StatFetcher.USAGE]}'                
         self.log.debug(f'Structured data that is to be sent to Arduino: {str(structured_data)}')
         return structured_data
     
