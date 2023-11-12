@@ -31,8 +31,8 @@ Arduino's Code to update data on the 1604 LCD display is inside the directory **
 
 # Result
 **While doing normal tasks:**
-https://github.com/usamaDEVahmed/CPU_GPU_TEMP_ARDUINO_1604/assets/41208249/32ffe66d-57ac-4674-a5c2-89759911286d
+![1604_LCD](https://github-production-user-asset-6210df.s3.amazonaws.com/41208249/282330006-c9d21346-5772-4943-bd55-5ce2020fd3b8.gif)
+
 
 **While Gaming!!!**
-https://github.com/usamaDEVahmed/CPU_GPU_TEMP_ARDUINO_1604/assets/41208249/adedeec3-4d3b-42f9-ba41-5b94ee4f840d
-
+![1604_LCD_WHILE_GAMING](https://github-production-user-asset-6210df.s3.amazonaws.com/41208249/282330012-da776bc2-4655-4b65-9c27-e5f219f26b9d.gif)
