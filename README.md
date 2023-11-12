@@ -25,3 +25,14 @@ It will send CPU/GPU Temperature/Usage to the connected Arduino. The port to whi
 Just run `**"python stat_fetcher.py"**`
 
 `{'CPU': {'TEMPERATURE': '44C', 'USAGE': '2.4%'}, 'GPU': {'TEMPERATURE': '29C', 'USAGE': '5.0%'}}`
+
+# Arduino's Code
+Arduino's Code to update data on the 1604 LCD display is inside the directory **arduino_display_on_1604** in the `file arduino_display_on_1604.ino`
+
+# Result
+**While doing normal tasks:**
+https://github.com/usamaDEVahmed/CPU_GPU_TEMP_ARDUINO_1604/assets/41208249/32ffe66d-57ac-4674-a5c2-89759911286d
+
+**While Gaming!!!**
+https://github.com/usamaDEVahmed/CPU_GPU_TEMP_ARDUINO_1604/assets/41208249/adedeec3-4d3b-42f9-ba41-5b94ee4f840d
+
