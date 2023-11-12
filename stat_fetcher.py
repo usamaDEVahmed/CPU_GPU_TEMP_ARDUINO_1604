@@ -16,6 +16,7 @@ class StatFetcher():
     GPU = 'GPU'
     TEMPERATURE = 'TEMPERATURE'
     USAGE = 'USAGE'
+    current_os_name = ''
 
     def __init__(self):
         '''
@@ -104,13 +105,19 @@ class StatFetcher():
                 StatFetcher.GPU: {StatFetcher.TEMPERATURE: str(int(self.gpu_temp_sensor.Value)) + 'C', StatFetcher.USAGE: '{value:.1f}%'.format(value = self.gpu_load_sensor.Value)}}
     
     def get_stats_linux(self):
-        return 'linux'
+        return 'Sorry. Not yet configured for Linux OS'
 
     def get_stats(self):
         '''
             Common method that uses the methods depending upon the OS and returns the stats
         '''
-        current_os = self.get_os()
+        if (StatFetcher.current_os_name is not None and (StatFetcher.current_os_name != '')):
+           current_os = StatFetcher.current_os_name 
+        else:
+
+            current_os = self.get_os()
+            StatFetcher.current_os_name = current_os
+        
         self.log.debug(f'Current OS: {current_os}')
         if current_os == StatFetcher.WINDOWS:
             return self.get_stats_win()
