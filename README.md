@@ -26,6 +26,8 @@ Just run `**"python stat_fetcher.py"**`
 
 `{'CPU': {'TEMPERATURE': '44C', 'USAGE': '2.4%'}, 'GPU': {'TEMPERATURE': '29C', 'USAGE': '5.0%'}}`
 
+**Anyone can scale this program from here or use this output to work for their own project!!!**
+
 # Arduino's Code
 Arduino's Code to update data on the 1604 LCD display is inside the directory **arduino_display_on_1604** in the `file arduino_display_on_1604.ino`
 
