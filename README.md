@@ -29,10 +29,5 @@ Just run `**"python stat_fetcher.py"**`
 # Arduino's Code
 Arduino's Code to update data on the 1604 LCD display is inside the directory **arduino_display_on_1604** in the `file arduino_display_on_1604.ino`
 
-# Result
-**While doing normal tasks:**
-![1604_LCD](https://github-production-user-asset-6210df.s3.amazonaws.com/41208249/282330006-c9d21346-5772-4943-bd55-5ce2020fd3b8.gif)
-
-
-**While Gaming!!!**
+# Result While Gaming
 ![1604_LCD_WHILE_GAMING](https://github-production-user-asset-6210df.s3.amazonaws.com/41208249/282330012-da776bc2-4655-4b65-9c27-e5f219f26b9d.gif)
