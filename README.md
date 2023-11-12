@@ -17,5 +17,7 @@ pyserial==3.5
 
 
 For Arduino two libs are used:
+
 LiquidCrystal_I2C.h==1.2.1
+
 Wire.h
