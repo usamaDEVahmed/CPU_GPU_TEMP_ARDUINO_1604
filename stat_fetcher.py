@@ -111,17 +111,14 @@ class StatFetcher():
         '''
             Common method that uses the methods depending upon the OS and returns the stats
         '''
-        if (StatFetcher.current_os_name is not None and (StatFetcher.current_os_name != '')):
-           current_os = StatFetcher.current_os_name 
-        else:
-
-            current_os = self.get_os()
-            StatFetcher.current_os_name = current_os
+        if (StatFetcher.current_os_name is None or (StatFetcher.current_os_name == '')):
+            StatFetcher.current_os_name = self.get_os()
+            self.log.debug(f'Current OS: {StatFetcher.current_os_name}')
         
-        self.log.debug(f'Current OS: {current_os}')
-        if current_os == StatFetcher.WINDOWS:
+        
+        if StatFetcher.current_os_name == StatFetcher.WINDOWS:
             return self.get_stats_win()
-        elif current_os == StatFetcher.LINUX:
+        elif StatFetcher.current_os_name == StatFetcher.LINUX:
             return self.get_stats_linux()
         else:
             return None
