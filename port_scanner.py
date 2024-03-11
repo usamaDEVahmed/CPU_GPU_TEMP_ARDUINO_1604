@@ -22,7 +22,7 @@ class PortScanner():
             Runs the Powershell command for win10 to fetch the USB port's name 
             to which Arduino board is connected
         '''
-        command = "Get-PnpDevice -Class 'Ports' -InstanceId 'USB*' -Status OK | findstr Arduino"
+        command = "Get-PnpDevice -Class 'Ports' -InstanceId 'USB*' -Status OK | findstr CH340"
         self.log.debug(f'Running command to find Arduino board\'s port name: {command}')
         try:
             result = subprocess.run(["powershell", "-Command", command], capture_output=True, shell=True, check=True)
