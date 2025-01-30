@@ -17,12 +17,12 @@ For Arduino two libs are used:
 
 
 # **HOW TO RUN:**
-run command `**"python sender.py"**`
+run command `"python sender.py"` as admin
 It will send CPU/GPU Temperature/Usage to the connected Arduino. The port to which Aruduino is connected will be scanned automatically by the scripts.
 
 # **Script that can be used individually:**
 `**"stat_fetcher.py"**` script gets all the details and returns it as a dictionary like the one given in the below examply. 
-Just run `**"python stat_fetcher.py"**`
+Just run `"python stat_fetcher.py"` as admin
 
 `{'CPU': {'TEMPERATURE': '44C', 'USAGE': '2.4%'}, 'GPU': {'TEMPERATURE': '29C', 'USAGE': '5.0%'}}`
 
