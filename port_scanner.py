@@ -11,7 +11,7 @@ import re
 class PortScanner():
 
     ERROR_RESPONSE = "'Get-PnpDevice' is not recognized as an internal or external command"
-    WIN_REGEX = 'COM[0-9]'
+    WIN_REGEX = 'COM[0-9]*'
 
     def __init__(self):
         self.port_name = None
